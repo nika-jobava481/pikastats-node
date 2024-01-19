@@ -1,5 +1,5 @@
 require('dotenv').config();
-const { Client, GatewayIntentBits, Message } = require('discord.js');
+const { Client, GatewayIntentBits, EmbedBuilder } = require('discord.js');
 
 const client = new Client({
     intents: [
@@ -9,33 +9,43 @@ const client = new Client({
     ],
 });
 
-client.on("ready",(client)=>{
-    console.log("ready",client.user.username)
+client.on("ready", (client) => {
+    console.log(`${client.user.username} is ready for work? ✅`)
 })
 
 client.on("messageCreate", (message) => {
     if (message.author.bot) return;
 
-    message.reply(  
+    message.reply(
         {
-            content:`Hi ${message.author.username}.\n ${message.content}`
+            content: `Hi ${message.author.username}.\n${message.content}`
         }
-        
+
     )
     console.log(message);
 })
 
-client.on("interactionCreate",(interaction)=>{
-    if(!interaction.isChatInputCommand()) return;
+client.on("interactionCreate", (interaction) => {
+    if (!interaction.isChatInputCommand()) return;
     console.log(interaction.commandName)
-    switch(interaction.commandName){
+    switch (interaction.commandName) {
         case 'ping':
-            interaction.reply(`pong! ${Math.abs(Date.now() - interaction.createdTimestamp)}`);
+            interaction.reply(`🏓pong! ${Math.abs(Date.now() - interaction.createdTimestamp)}ms`);
+            break;
         case 'fuck':
-            interaction.reply(`${interaction.options.get('who').value} was fucked successfully,\ndo you want to fuck their mother too?`)
-            // console.log(interaction.options.get('who'))
+            interaction.reply(`${interaction.options.get('who')?.value} was fucked successfully!`);
+            break;
+        case 'embed':
+            const embed = new EmbedBuilder()
+                                .setTitle('title')
+                                .setDescription("description")
+                                .setColor("Random")
+            interaction.reply({embeds:[embed]})
+            break;
+
     }
-})
+
+});
 
 
 client.login(process.env.TOKEN);
