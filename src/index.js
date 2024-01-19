@@ -25,4 +25,17 @@ client.on("messageCreate", (message) => {
     console.log(message);
 })
 
+client.on("interactionCreate",(interaction)=>{
+    if(!interaction.isChatInputCommand()) return;
+    console.log(interaction.commandName)
+    switch(interaction.commandName){
+        case 'ping':
+            interaction.reply(`pong! ${Math.abs(Date.now() - interaction.createdTimestamp)}`);
+        case 'fuck':
+            interaction.reply(`${interaction.options.get('who').value} was fucked successfully,\ndo you want to fuck their mother too?`)
+            // console.log(interaction.options.get('who'))
+    }
+})
+
+
 client.login(process.env.TOKEN);
